@@ -18,19 +18,23 @@ def get_animal_data():
     with each animal's info on separate lines.
     """
     output = ''  # define an empty string
-    for animal_data in animals_data:
+    for animal_obj in animals_data:
         # append information to each string
-        output += '<li class="cards__item">'
-        output += f'<div class="card__title">{animal_data["name"]}</div>'
-        output += '<p class="card__text">'
-        output += f'<strong>Diet: </strong> {animal_data["characteristics"]["diet"]}<br/>'
-        output += f'<strong>Location: </strong> {animal_data["locations"][0]}<br/>'
-        if 'type' in animal_data['characteristics']:
-            output += f'<strong>Type: </strong> {animal_data["characteristics"]["type"]}<br/>'
-        else:
-            continue
-        output += '</p>'
-        output += '</li>'
+        output += serialize_animal(animal_obj)
+    return output
+
+
+def serialize_animal(animal_obj):
+    output = ''
+    output += '<li class="cards__item">\n'
+    output += f'<div class="card__title">{animal_obj["name"]}</div>\n'
+    output += '<p class="card__text">'
+    output += f'<strong>Diet: </strong> {animal_obj["characteristics"]["diet"]}<br/>'
+    output += f'<strong>Location: </strong> {animal_obj["locations"][0]}<br/>'
+    if 'type' in animal_obj['characteristics']:
+        output += f'<strong>Type: </strong> {animal_obj["characteristics"]["type"]}<br/>'
+    output += '</p>'
+    output += '</li>'
     return output
 
 
