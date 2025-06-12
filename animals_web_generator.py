@@ -9,7 +9,7 @@ def load_data(file_path):
         return json.load(handle)
 
 
-animals_data = load_data('My-Zootopia/animals_data.json')
+animals_data = load_data('animals_data.json')
 
 
 def get_animal_data():
@@ -20,25 +20,27 @@ def get_animal_data():
     output = ''  # define an empty string
     for animal_data in animals_data:
         # append information to each string
-        output += f"Name: {animal_data['name']}\n"
-        output += f"Diet: {animal_data['characteristics']['diet']}\n"
-        output += f"Location: {animal_data['locations'][0]}\n"
+        output += '<li class="cards__item">'
+        output += f"Name: {animal_data['name']}<br/>\n"
+        output += f"Diet: {animal_data['characteristics']['diet']}<br/>\n"
+        output += f"Location: {animal_data['locations'][0]}<br/>\n"
         if 'type' in animal_data['characteristics']:
-            output += f"Type: {animal_data['characteristics']['type']}\n"
+            output += f"Type: {animal_data['characteristics']['type']}<br/>\n"
         else:
             continue
+        output += '</li>'
     return output
 
 
 output = get_animal_data()
 
 # Read the HTML template
-with open('My-Zootopia/animals_template.html', 'r') as htmlfile:
+with open('animals_template.html', 'r') as htmlfile:
     template = htmlfile.read()
 
 # Replace placeholder with animal info
 final_html = template.replace('__REPLACE_ANIMALS_INFO__', output)
 
 # Write the final HTML
-with open('My-Zootopia/animals.html', 'w') as newhtmlfile:
+with open('animals.html', 'w') as newhtmlfile:
     newhtmlfile.write(final_html)
