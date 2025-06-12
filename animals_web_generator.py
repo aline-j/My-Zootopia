@@ -9,41 +9,45 @@ def load_data(file_path):
         return json.load(handle)
 
 
-animals_data = load_data('animals_data.json')
-
-
-def get_animal_data():
-    """
-    Formats animal data into a plain text block,
-    with each animal's info on separate lines.
-    """
-    output = ''  # define an empty string
-    for animal_obj in animals_data:
-        # append information to each string
-        output += serialize_animal(animal_obj)
-    return output
-
-
 def serialize_animal(animal_obj):
-    output = ''
-    output += '<li class="cards__item">\n'
-    output += f'<div class="card__title">{animal_obj["name"]}</div>\n'
-    output += '<div class="card__text">'
-    output += '<ul>'
-    output += f'<li><strong>Diet: </strong> {animal_obj["characteristics"]["diet"]}</li>'
-    output += f'<li><strong>Location: </strong> {animal_obj["locations"][0]}</li>'
-    if 'type' in animal_obj['characteristics']:
-        output += f'<li><strong>Type: </strong> {animal_obj["characteristics"]["type"]}</li>'
-    output += f'<li><strong>Class: </strong> {animal_obj["taxonomy"]["class"]}</li>'
-    if 'name_of_young' in animal_obj['characteristics']:
-        output += f'<li><strong>Name of young: </strong> {animal_obj["characteristics"]["name_of_young"]}</li>'
-    output += '</ul>'
-    output += '</div>'
-    output += '</li>'
+    name = animal_obj.get('name')
+    info = {
+        "Diet": animal_obj['characteristics'].get('diet'),
+        "Location": animal_obj.get('locations')[0],
+        "Type": animal_obj['characteristics'].get('type'),
+        "Class": animal_obj['taxonomy'].get('class'),
+        "Name of young": animal_obj['characteristics'].get('name_of_young'),
+        "Lifespan": animal_obj['characteristics'].get('lifespan'),
+        "Weight": animal_obj['characteristics'].get('weight'),
+        "Height": animal_obj['characteristics'].get('height'),
+        "Length": animal_obj['characteristics'].get('length')   
+    }
+
+    output = '<li class="cards__item">\n'
+    output += f'<div class="card__title">{name}</div>\n'
+    output += '<div class="card__text">\n<ul>\n'
+
+    for key, value in info.items():
+        if value:
+            output += f'<li><strong>{key}:</strong> {value}</li>\n'
+
+    output += '</ul>\n</div>\n</li>\n'
     return output
 
 
-output = get_animal_data()
+def get_animal_data(animals_data):
+    """
+    Formats all animals into a single HTML string.
+    """
+    output = ''
+    for animal in animals_data:
+        output += serialize_animal(animal)
+    return output
+
+
+# Main execution
+animals_data = load_data('animals_data.json')
+output = get_animal_data(animals_data)
 
 # Read the HTML template
 with open('animals_template.html', 'r') as htmlfile:
